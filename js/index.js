@@ -14,11 +14,12 @@ var ctx = {
     currentFlights: [],
     data1: [],
     data2: [],
-    planeUpdater: null
+    planeUpdater: null,
+    year: 2016
 };
 
 const PROJECTIONS = {
-    ER: d3.geoEquirectangular().center([-10,15]).scale(1000).translate([200,1000]),
+    ER: d3.geoEquirectangular().center([-10,20]).scale(1200).translate([200,1000]),
     //ER: d3.geoEquirectangular().center([0,0]).scale(128).translate([ctx.w/2,ctx.h/2]),
 };
 var path4proj = d3.geoPath()
@@ -103,9 +104,13 @@ var createViz = function(){
 
 /* data fetching and transforming */
 var loadGeo = function(svgEl){
-    var promises = [d3.json("ne_50m_admin_0_countries.geojson"),
-                    d3.json("ne_50m_lakes.geojson"),
-                    d3.json("ne_50m_rivers_lake_centerlines.geojson")];
+    var promises = [//d3.json("ne_50m_admin_0_countries.geojson"),
+                    $.getJSON("ne_50m_admin_0_countries.geojson"),
+                    $.getJSON("ne_50m_lakes.geojson"),
+                    $.getJSON("ne_50m_rivers_lake_centerlines.geojson")
+                    //d3.json("ne_50m_lakes.geojson"),
+                    //d3.json("ne_50m_rivers_lake_centerlines.geojson")
+                  ];
     Promise.all(promises).then(function(data){
         drawMap(data[0], data[1], data[2], svgEl);
     }).catch(function(error){console.log(error)});
@@ -139,10 +144,17 @@ function getExactTime(time) {
 
 //var startDate = new Date(formatTimestamp(1474239711)),
 //    endDate = new Date(formatTimestamp(1474239819));
-
+//GetVal();
+//if(document.getElementById("year").value === "2016"){
+//  var startDate = 1474157000,
+//      endDate =   1474759000;
+//}
+//else{
+//  var startDate = 1507421000,
+//      endDate =   1508026000;
+//}
 var startDate = 1474157000,
     endDate =   1474759000;
-
 
 var margin = {top:50, right:10, bottom:0, left:80},
     width = 1400 - margin.left - margin.right,
@@ -253,9 +265,27 @@ playButton
 })
 //})
 
+function GetVal(){
+    ctx.year = document.getElementById("year").value;
+    console.log(ctx.year);
+}
 
 var initflight = function() {
-    d3.json("./data/1000_2016.json").then((data) => {
+    //GetVal();
+    //console.log(document.getElementById("year").value === "2016")
+    //if(document.getElementById("year").value === "2016"){
+    //    d3.json("./data/vis_1000_2016.json").then((data) => {
+    //        ctx.data1 = data.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
+    //      });
+    //}
+    //else if (document.getElementById("year").value === "2017") {
+    //  d3.json("./data/vis_1000_2017.json").then((data) => {
+    //      ctx.data1 = data.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
+      //  });
+    //};
+    //d3.json("./data/1000_2016.json").then((data) => {
+    $.getJSON("./data/1000_2016.json", function (data){
+
         ctx.data1 = data.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
     });
     d3.selectAll("image").remove();
@@ -396,7 +426,8 @@ function drawflight(e){
   //console.log(data);
 
 
-  d3.json("./data/100_2016.json").then((data) => {
+  //d3.json("./data/100_2016.json").then((data) => {
+  $.getJSON("./data/100_2016.json", function (data){
 
       const datas = data.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
 
@@ -468,9 +499,23 @@ function update(h) {
 
   ctx.timestamp = Math.floor(h/1000)*1000;
 
-  d3.json("./data/1000_2016.json").then((data) => {
+  //d3.json("./data/1000_2016.json").then((data) => {
+  $.getJSON("./data/1000_2016.json", function (data){
       ctx.data1 = data.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
   });
+  //GetVal();
+  //console.log(document.getElementById("year").value === "2016")
+
+  //if(document.getElementById("year").value === "2016"){
+  //    d3.json("./data/vis_1000_2016.json").then((data) => {
+  //        ctx.data1 = data.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
+  //      });
+  //}
+  //else if (document.getElementById("year").value === "2017") {
+  //  d3.json("./data/vis_1000_2017.json").then((data) => {
+  //      ctx.data1 = data.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
+  //    });
+  //};
   //ctx.data1 = datas;
   d3.selectAll("image").remove();
 

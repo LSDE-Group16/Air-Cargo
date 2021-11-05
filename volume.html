@@ -66,7 +66,7 @@
 
     #play-button {
       position: absolute;
-      top: 380px;
+      top: 500px;
       left: 10px;
       background: #f08080;
       padding-right: 26px;
@@ -253,16 +253,19 @@
 </style>
 <body>
   <div id="cargoports" style= "background-color: #F5F5F5; text-align:auto;">
-  <blockquote style="width:100%">
-    Here is a long quotation here is a long quotation here is a long quotation</br>
-    here is a long quotation here is a long quotation here is a long quotation</br>
-    here is a long quotation here is a long quotation here is a long quotation.</br>
-  </blockquote>
-
+  </div>
+  <div id = "cargocount" style="width:600px; height:100%; background: #F5F5F5; border:none;">
   </div>
 
 <script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega@5.17.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@4.17.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.12.2"></script>
+<script src="http://code.jquery.com/jquery-1.6.min.js"></script>
 <script>
+var ctx = {
+    dataairports : []
+};
   //let width2 = window.outerWidth, height2 = window.outerHeight
   let width2 = 1000, height2 = 600;
   var htimestamp;
@@ -291,8 +294,8 @@
   }
 
   let europeProjection = d3.geoMercator()
-    	.center([ 7, 56])
-      .scale([ width2  / 1])
+    	.center([ 20, 50])
+      .scale([ width2  / 1.5])
       .translate([ width2 / 2, height2 / 2 ])
 
 
@@ -364,7 +367,8 @@
   var color = ["#6c4e97","#ED8739"];
 
   // Request the GeoJSON
-  d3.json(geoJsonUrl).then(geojson => {
+  //d3.json(geoJsonUrl).then(geojson => {
+  $.getJSON("./eurmap.geojson", function(geojson) {
     // Tell D3 to render a path for each GeoJSON feature
     group2.selectAll("path")
       .data(geojson.features)
@@ -394,13 +398,19 @@
     htimestamp = h;
 
 
+
       //$.getJSON("https://github.com/YimingXu1/ML-Diary/tree/master/data/2016_airportspoint.json", function(json)
 
-      d3.json("./data/2016_airportspoint.json").then((data) => {
+      //d3.json("./data/airportspoint16.json").then((data) => {
+      $.getJSON("./data/airportspoint16.json", function (data){
           const Markers = (data).filter((d) => d.time < htimestamp);
             //.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
             //data.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
           //console.log(Markers);
+
+          ctx.dataairports = Markers;
+          //console.log(ctx.dataairports);
+          //drawcargo();
 
           group2.selectAll("myCircles")
                   .data(Markers)
@@ -464,6 +474,25 @@
         });
 
   }
+
+function drawcargo(){
+
+    //console.log(alldata);
+    var vegaBar ={
+      "width": 799,
+      "height": 100,
+      "data": {
+          "values": ctx.dataairports
+        },
+      "mark": "line",
+      "encoding": {
+        "x": {"field": "time"},
+        "y": {"field": "type", "aggregate": "sum"}
+      }
+    }
+    vegaEmbed("#cargocount", vegaBar);
+
+}
 
 
 </script>

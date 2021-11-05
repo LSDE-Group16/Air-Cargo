@@ -99,17 +99,49 @@ blockquote:before {
 .link--target {
   stroke: #2ca02c;
 }
+
+.Aligner {
+  display: flex;
+  align-items: center;
+  min-height: 24em;
+  justify-content: center;
+}
+
+.Aligner-item {
+  flex: 1;
+}
+
+.Aligner-item--top {
+  align-self: flex-start;
+}
+
+.Aligner-item--bottom {
+  align-self: flex-end;
+}
+
+.Aligner-item--fixed {
+  flex: none;
+  max-width: 50%;
+}
+
+.main{
+	text-align: center;
+	background-color: #fff;
+	border-radius: 20px;
+	width: 1000px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+}
+
 </style>
 <body>
-<div id="hotmap" style= "background: #FBF9EB; text-align:auto;">
-  <blockquote>
-    Here is a long quotation here is a long quotation here is a long quotation<br/>
-    here is a long quotation here is a long quotation here is a long quotation<br/>
-    here is a long quotation here is a long quotation here is a long quotation.<br/>
-  </blockquote>
+<div id="hotmap" class="main" style= "background: #FBF9EB; text-align:auto;">
 
 </div>
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.6.min.js"></script>
 <script>
 
 //d3 = require("d3@4")
@@ -146,8 +178,10 @@ for(var i = 0; i < argo_list.length; i++){
 
 var datalink;
 //$.getJSON("https://github.com/YimingXu1/ML-Diary/tree/master/data/airports_link.json", function(error, classes){
-d3.json("./data/airports_link.json", function(error, classes) {
-  if (error) throw error;
+//d3.json("https://github.com/LSDE-Group16/Air-Cargo/blob/main/data/airports_link.json", function(error, classes) {
+$.getJSON("./data/airports_link.json", function(classes) {
+
+  //if (error) throw error;
 
   var root = packageHierarchy(classes)
       .sum(function(d) { return d.size; });
