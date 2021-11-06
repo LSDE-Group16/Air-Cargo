@@ -367,8 +367,8 @@ var ctx = {
   var color = ["#6c4e97","#ED8739"];
 
   // Request the GeoJSON
-  //d3.json(geoJsonUrl).then(geojson => {
-  $.getJSON("./eurmap.geojson", function(geojson) {
+  d3.json(geoJsonUrl).then(geojson => {
+  //$.getJSON("./eurmap.geojson", function(geojson) {
     // Tell D3 to render a path for each GeoJSON feature
     group2.selectAll("path")
       .data(geojson.features)
@@ -401,8 +401,8 @@ var ctx = {
 
       //$.getJSON("https://github.com/YimingXu1/ML-Diary/tree/master/data/2016_airportspoint.json", function(json)
 
-      //d3.json("./data/airportspoint16.json").then((data) => {
-      $.getJSON("./data/airportspoint16.json", function (data){
+      d3.json("./data/airportspoint16.json").then((data) => {
+      //$.getJSON("./data/airportspoint16.json", function (data){
           const Markers = (data).filter((d) => d.time < htimestamp);
             //.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
             //data.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);

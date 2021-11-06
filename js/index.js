@@ -104,12 +104,12 @@ var createViz = function(){
 
 /* data fetching and transforming */
 var loadGeo = function(svgEl){
-    var promises = [//d3.json("ne_50m_admin_0_countries.geojson"),
-                    $.getJSON("ne_50m_admin_0_countries.geojson"),
-                    $.getJSON("ne_50m_lakes.geojson"),
-                    $.getJSON("ne_50m_rivers_lake_centerlines.geojson")
-                    //d3.json("ne_50m_lakes.geojson"),
-                    //d3.json("ne_50m_rivers_lake_centerlines.geojson")
+    var promises = [d3.json("ne_50m_admin_0_countries.geojson"),
+                    //$.getJSON("ne_50m_admin_0_countries.geojson"),
+                    //$.getJSON("ne_50m_lakes.geojson"),
+                    //$.getJSON("ne_50m_rivers_lake_centerlines.geojson")
+                    d3.json("ne_50m_lakes.geojson"),
+                    d3.json("ne_50m_rivers_lake_centerlines.geojson")
                   ];
     Promise.all(promises).then(function(data){
         drawMap(data[0], data[1], data[2], svgEl);
@@ -283,8 +283,8 @@ var initflight = function() {
     //      ctx.data1 = data.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
       //  });
     //};
-    //d3.json("./data/1000_2016.json").then((data) => {
-    $.getJSON("./data/1000_2016.json", function (data){
+    d3.json("./data/1000_2016.json").then((data) => {
+    //$.getJSON("./data/1000_2016.json", function (data){
 
         ctx.data1 = data.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
     });
@@ -499,8 +499,8 @@ function update(h) {
 
   ctx.timestamp = Math.floor(h/1000)*1000;
 
-  //d3.json("./data/1000_2016.json").then((data) => {
-  $.getJSON("./data/1000_2016.json", function (data){
+  d3.json("./data/1000_2016.json").then((data) => {
+  //$.getJSON("./data/1000_2016.json", function (data){
       ctx.data1 = data.filter((d) => Math.floor(d.timeAtServer) == ctx.timestamp);
   });
   //GetVal();
